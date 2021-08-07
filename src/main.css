@@ -5,19 +5,63 @@
 :root {
     --footer-height: 5rem;
     --main-height: calc(100vh - var(--footer-height));
-}
-body {
-    background-color: #1a1a1a;
-    height: 100vh;
-    width: 100vw;
+
+    --border-color: rgb(16, 16, 16);
+    --select-color: rgb(23, 23, 23);
+    --footer-color: rgb(26, 26, 26);
+    --main-color: rgb(33, 33, 33);
+    --text-color: #FFFFFF;
+
+    --progress-main: #FF0000;
+    --progress-hover: #696969;
+    --progress-load: #858585;
+    --progress-bg: #333333;
 }
 
 main {
-    background-color: rgb(236, 51, 91);
+    background-color: var(--main-color);
     height: var(--main-height);
 }
 
 footer {
-    background-color: rgb(118, 45, 202);
+    background-color: var(--footer-color);
+    border-top: 1px solid var(--border-color);
     height: var(--footer-height);
 }
+
+.mask-img {
+    background-color: var(--text-color);
+    mask-position: center;
+    mask-repeat: no-repeat;
+    mask-size: contain;
+}
+
+.player_btn {
+    height: 2.5rem;
+    width: 2.5rem;
+}
+
+.player_btn svg{
+    height: 100%;
+    width: 100%;
+}
+
+.player_btn svg path{
+    fill: var(--text-color);
+}
+
+#player_control_panel {
+}
+/*
+#skip_previous.mask-img {
+    mask-image: url('./assets/skip_previous.svg');
+}
+#play_arrow.mask-img {
+    mask-image: url('./assets/play_arrow.svg');
+}
+#skip_next.mask-img {
+    mask-image: url('./assets/skip_next.svg');
+}
+#volume.mask-img {
+    mask-image: url('./assets/volume_up.svg');
+} */
