@@ -16,6 +16,9 @@
     --progress-hover: #696969;
     --progress-load: #858585;
     --progress-bg: #333333;
+
+    --cd-size: 6rem;
+    --cd-center-size: 10rem;
 }
 
 main {
@@ -36,6 +39,61 @@ footer {
     mask-size: contain;
 }
 
+.player_cd{
+    user-select: none;
+    height: var(--cd-size);
+    width: var(--cd-size);
+    transition-property: height,width;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.player_cd.cd_center{
+    height: var(--cd-center-size);
+    width: var(--cd-center-size);
+}
+
+.process_bar {
+}
+
+.process_bar_bg {
+    background-color: var(--progress-bg);
+    height: 2px;
+    transition-property: height;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.process_bar_main {
+    background-color: var(--progress-main);
+    position: relative;
+}
+
+.process_bar_main::after {
+    content: "";
+    background-color: var(--progress-main);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    height: 0px;
+    width: 0px;
+    transform: translate(50%,-50%);
+    transition-property: height,width;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+.process_bar:hover .process_bar_bg {
+    height: .25rem;
+}
+
+.process_bar:hover .process_bar_main::after {
+    height: .75rem;
+    width: .75rem;
+}
+
+
 .player_btn {
     height: 2.5rem;
     width: 2.5rem;
@@ -52,16 +110,3 @@ footer {
 
 #player_control_panel {
 }
-/*
-#skip_previous.mask-img {
-    mask-image: url('./assets/skip_previous.svg');
-}
-#play_arrow.mask-img {
-    mask-image: url('./assets/play_arrow.svg');
-}
-#skip_next.mask-img {
-    mask-image: url('./assets/skip_next.svg');
-}
-#volume.mask-img {
-    mask-image: url('./assets/volume_up.svg');
-} */
