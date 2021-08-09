@@ -17,8 +17,8 @@
     --progress-load: #858585;
     --progress-bg: #333333;
 
-    --cd-size: 6rem;
-    --cd-center-size: 10rem;
+    --cd-size: 8rem;
+    --cd-center-size: 14rem;
 }
 
 main {
@@ -37,6 +37,27 @@ footer {
     mask-position: center;
     mask-repeat: no-repeat;
     mask-size: contain;
+}
+
+.player_list_scroll {
+    transition-property: left;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+#player_list > div {
+    position: relative;
+}
+
+#player_list > div::after {
+    content: "";
+    background-color: #fff6;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 2px;
+    transform: translateX(-50%);
 }
 
 .player_cd{
@@ -95,8 +116,8 @@ footer {
 
 
 .player_btn {
-    height: 2.5rem;
-    width: 2.5rem;
+    height: 2.25rem;
+    width: 2.25rem;
 }
 
 .player_btn svg{
