@@ -39,17 +39,7 @@ footer {
     mask-size: contain;
 }
 
-.player_list_scroll {
-    transition-property: left;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
-}
-
-#player_list > div {
-    position: relative;
-}
-
-#player_list > div::after {
+.center_line::after {
     content: "";
     background-color: #fff6;
     position: absolute;
@@ -60,6 +50,16 @@ footer {
     transform: translateX(-50%);
 }
 
+#player_list_scroll {
+    transition-property: left;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+#player_list > div {
+    position: relative;
+}
+
 .player_cd{
     user-select: none;
     height: var(--cd-size);
@@ -67,6 +67,7 @@ footer {
     transition-property: height,width;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
+    position: relative;
 }
 
 .player_cd.cd_center{
