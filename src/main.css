@@ -21,6 +21,20 @@
     --cd-center-size: 14rem;
 }
 
+/* ! test only */
+.center_line::after {
+    content: "";
+    background-color: #fff6;
+    position: absolute;
+    top: 0;
+    left: 50%;
+    height: 100%;
+    width: 2px;
+    transform: translateX(-50%);
+    pointer-events: none;
+}
+/* ! test only */
+
 main {
     background-color: var(--main-color);
     height: var(--main-height);
@@ -32,22 +46,17 @@ footer {
     height: var(--footer-height);
 }
 
-.mask-img {
+.bg_img {
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.mask_img {
     background-color: var(--text-color);
     mask-position: center;
     mask-repeat: no-repeat;
-    mask-size: contain;
-}
-
-.center_line::after {
-    content: "";
-    background-color: #fff6;
-    position: absolute;
-    top: 0;
-    left: 50%;
-    height: 100%;
-    width: 2px;
-    transform: translateX(-50%);
+    mask-size: cover;
 }
 
 #player_list_scroll {
@@ -68,6 +77,8 @@ footer {
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
     position: relative;
+    border: 1px solid var(--border-color);
+    box-sizing: border-box;
 }
 
 .player_cd.cd_center{

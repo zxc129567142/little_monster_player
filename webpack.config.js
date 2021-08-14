@@ -12,7 +12,7 @@ const config = {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: "[name].[hash:10].js"
+        filename: "[name].[hash:6].js"
     },
     devServer: {
         open: true,
@@ -25,7 +25,7 @@ const config = {
             template: './src/index.html',
         }),
         new MiniCssExtractPlugin({
-            filename: '[name].[hash:10].css', // 修改生成路徑
+            filename: '[name].[hash:6].css', // 修改生成路徑
         }),
         // Add your plugins here
         // Learn more about plugins from https://webpack.js.org/configuration/plugins/
@@ -41,13 +41,36 @@ const config = {
                 use: [stylesHandler, 'css-loader', 'postcss-loader'],
             },
             {
-                test: /\.(eot|svg|ttf|woff|woff2|png|jpe?g|gif)$/i,
+              test: /\.(png|jpe?g|gif|svg)$/i,
+              use: [
+                {
+                  loader: 'url-loader',
+                  options: {
+                    limit: true,
+                    name: 'img/[name].[ext]',
+                  },
+                },
+              ],
+            },
+            {
+                test: /\.(mp3|m4a)$/i,
+                use: [
+                    {
+                        loader: 'file-loader',
+                        options: {
+                            name: 'audio/[name].[ext]',
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(eot|ttf|woff|woff2)$/i,
                 type: 'asset',
                 use: [
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'img/[name].[hash:10].[ext]',
+                            name: 'asset/[name].[ext]',
                         },
                     },
                 ],
