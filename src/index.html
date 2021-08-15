@@ -19,16 +19,17 @@
     <!-- 說明文件 https://tailwindcss.com/docs/gap -->
     <footer class="px-5 py-3">
         <div id="player_control_panel" class="gap-3 flex flex-nowrap flex-row items-center text-white h-full relative">
-            <div class="-mx-5 process_bar overflow-hidden w-screen absolute -top-3 left-0 flex items-center h-6 transform -translate-y-3">
-                <div class="process_bar_bg w-full">
-                    <div class="process_bar_main h-full" style="width:5%"></div>
+            <div class="-mx-5 progress_bar overflow-hidden w-screen absolute -top-3 left-0 flex items-center h-6 transform -translate-y-3">
+                <div class="progress_bar_bg w-full">
+                    <div class="progress_bar_main h-full" style="width:5%"></div>
                 </div>
             </div>
             <div id="skip_previous" class="player_btn" title="上一首">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M7 6c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1s-1-.45-1-1V7c0-.55.45-1 1-1zm3.66 6.82l5.77 4.07c.66.47 1.58-.01 1.58-.82V7.93c0-.81-.91-1.28-1.58-.82l-5.77 4.07c-.57.4-.57 1.24 0 1.64z"/></svg>
             </div>
-            <div id="play_arrow" class="player_btn" title="播放">
-                <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"/></svg>
+            <div id="play_and_pause" class="player_btn" title="播放">
+                <svg id="play" style="display:none;" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"/></svg>
+                <svg id="pause" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M8 19c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2v10c0 1.1.9 2 2 2zm6-12v10c0 1.1.9 2 2 2s2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2z"/></svg>
             </div>
             <div id="skip_next" class="player_btn" title="下一首">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M7.58 16.89l5.77-4.07c.56-.4.56-1.24 0-1.63L7.58 7.11C6.91 6.65 6 7.12 6 7.93v8.14c0 .81.91 1.28 1.58.82zM16 7v10c0 .55.45 1 1 1s1-.45 1-1V7c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
