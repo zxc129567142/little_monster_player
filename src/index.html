@@ -4,14 +4,17 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Little Monster Player</title>
 </head>
 <body class="h-screen w-screen">
     <main>
         <div class="px-5 py-3 h-full">
             <div id="player_list" class="flex flex-nowrap flex-row items-end text-white h-full">
                 <div class="center_line w-full overflow-hidden relative h-full">
-                    <div id="player_list_scroll" class="absolute bottom-0 left-0  gap-6 flex flex-nowrap items-end flex-row"></div>
+                    <div class="absolute top-0 left-0 w-full" style="height: calc(100% - var(--cd-center-size) * 1.1);">
+                        <canvas id="player_view" class="h-full w-full"></canvas>
+                    </div>
+                    <div id="player_list_scroll" class="absolute bottom-0 left-0 gap-6 flex flex-nowrap items-end flex-row"></div>
                 </div>
             </div>
         </div>
@@ -20,8 +23,9 @@
     <footer class="px-5 py-3">
         <div id="player_control_panel" class="gap-3 flex flex-nowrap flex-row items-center text-white h-full relative">
             <div class="-mx-5 progress_bar overflow-hidden w-screen absolute -top-3 left-0 flex items-center h-6 transform -translate-y-3">
-                <div class="progress_bar_bg w-full">
-                    <div class="progress_bar_main h-full" style="width:5%"></div>
+                <div class="progress_bar_bg relative w-full">
+                    <div class="progress_bar_pre absolute -translate-y-1/2 left-0 h-full" style="width:0%"></div>
+                    <div class="progress_bar_main absolute -translate-y-1/2 left-0 h-full" style="width:0%"></div>
                 </div>
             </div>
             <div id="skip_previous" class="player_btn" title="上一首">

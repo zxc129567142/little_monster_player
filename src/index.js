@@ -9,7 +9,8 @@ const play = control.querySelector("#play");
 const pause = control.querySelector("#pause");
 
 const player = new Player(list_div, control);
-player.init()
+player.init();
+player.volume(10);
 window.player = player
 
 // const progress_bar = control.querySelector(".progress_bar_main")

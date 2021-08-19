@@ -14,7 +14,7 @@
 
     --progress-main: #FF0000;
     --progress-hover: #696969;
-    --progress-load: #858585;
+    --progress-pre: #858585;
     --progress-bg: #333333;
 
     --cd-size: 8rem;
@@ -97,9 +97,12 @@ footer {
     transition-duration: 300ms;
 }
 
+.progress_bar_pre {
+    background-color: var(--progress-pre);
+}
+
 .progress_bar_main {
     background-color: var(--progress-main);
-    position: relative;
 }
 
 .progress_bar_main::after {

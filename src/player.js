@@ -13,6 +13,7 @@ export default class Player {
         this.control = control;
         this.prog_bar_bg = control.querySelector(".progress_bar_bg");
         this.prog_bar_main = control.querySelector(".progress_bar_main");
+        this.prog_bar_pre = control.querySelector(".progress_bar_pre");
 
         this.data = data;
         this.cd_list = this.list_div.querySelector("#player_list_scroll");
@@ -126,21 +127,35 @@ export default class Player {
 
         audio.addEventListener('loadstart', ()=> {
             console.log("[loadstart]");
-            this.progress_bar(0)
+            this.progress_bar(this.prog_bar_main, 0);
+            this.progress_bar(this.prog_bar_pre, 0);
         });
 
         audio.addEventListener('progress', ()=> {
             console.log("[progress]");
+            // player.audio.buffered.end(0)
+            // console.log("networkState: ",this.audio.networkState);
+            // console.log("readyState: ", this.audio.readyState);
+            if (this.audio.readyState === 4) this.progress_bar(this.prog_bar_pre,this.audio.buffered.end(0))
         });
 
         audio.addEventListener("canplay", () => {
             console.log("[canplay]");
         });
 
+        // audio.addEventListener("timeupdate", () => {
+        //     console.log("[timeupdate]");
+        // });
+
+        // audio.addEventListener("seeking", () => {
+        //     console.log("[seeking]");
+        // });
+
         audio.addEventListener('timeupdate', () => {
             // console.log("[timeupdate]",e,audio.currentTime);
             // console.log("[timeupdate]", audio.currentTime);
-            this.progress_bar(this.audio.currentTime)
+            // ! 更改 this.audio.currentTime 可跳時間
+            this.progress_bar(this.prog_bar_main ,this.audio.currentTime)
         });
 
         audio.addEventListener("readyState", () => {
@@ -162,15 +177,14 @@ export default class Player {
         this.next();
     }
     // 競渡條
-    progress_bar(value) {
+    progress_bar(prog_bar,value) {
         value = (typeof value !== "number") ? 0 : value
         const max = this.audio.duration
         // value =
         let pass = value / max * 100
         pass = (pass >= 100) ? 100 : pass
         // this.prog_bar_bg
-        this.prog_bar_main.style.width = pass + "%"
-
+        prog_bar.style.width = pass + "%"
     }
     // 播放
     play() {
