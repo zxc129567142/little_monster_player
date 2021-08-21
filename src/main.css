@@ -86,7 +86,15 @@ footer {
     width: var(--cd-center-size);
 }
 
-.progress_bar {
+.progress_bar { }
+
+.progress_bar:hover .progress_bar_bg {
+    height: .25rem;
+}
+
+.progress_bar:hover .progress_bar_main::after {
+    height: .75rem;
+    width: .75rem;
 }
 
 .progress_bar_bg {
@@ -97,8 +105,26 @@ footer {
     transition-duration: 300ms;
 }
 
+.progress_bar_bg > div{
+    pointer-events: none;
+    width: 0%;
+}
+
+.progress_bar_bg > div:not(.progress_bar_hover){
+    transition-property: width;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
 .progress_bar_pre {
     background-color: var(--progress-pre);
+    opacity: 0.3;
+}
+
+.progress_bar_hover {
+    background-color: var(--progress-hover);
+    opacity: 0.8;
+    /* transition: none !important; */
 }
 
 .progress_bar_main {
@@ -120,15 +146,18 @@ footer {
     transition-duration: 300ms;
 }
 
-.progress_bar:hover .progress_bar_bg {
-    height: .25rem;
+#time_hint {
+    background-color: var(--footer-color);
+    border-top: 1px solid var(--border-color);
+    pointer-events: none;
+    transform: translate3d(-50%,0%,0%);
+    font-size: 14px;
+    opacity: 0;
 }
 
-.progress_bar:hover .progress_bar_main::after {
-    height: .75rem;
-    width: .75rem;
+#time_hint.show {
+    opacity: 1;
 }
-
 
 .player_btn {
     height: 2.25rem;
