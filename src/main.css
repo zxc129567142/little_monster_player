@@ -160,13 +160,14 @@ footer {
 }
 
 .player_btn {
-    height: 2.25rem;
-    width: 2.25rem;
+    /* height: 2.25rem;
+    width: 2.25rem; */
+    cursor: pointer;
 }
 
 .player_btn svg{
     height: 100%;
-    width: 100%;
+    width: max-content;
 }
 
 .player_btn svg path{

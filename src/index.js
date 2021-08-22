@@ -1,4 +1,4 @@
-import { mPost, mGet, getPVal, getRootVar } from './func.js';
+// import { mPost, mGet, getPVal, getRootVar } from './func.js';
 import Player from './player.js';
 import "./main.css";
 
@@ -10,7 +10,7 @@ const pause = control.querySelector("#pause");
 
 const player = new Player(list_div, control);
 player.init();
-player.volume(10);
+// player.volume(10);
 window.player = player
 
 // const progress_bar = control.querySelector(".progress_bar_main")
@@ -30,21 +30,14 @@ skip_previous.onclick = () => {
 play_and_pause.onclick = () => {
     switch (player.state) {
         case "playing":
-            play.style.display = "block";
-            pause.style.display = "none";
             player.pause();
             break;
         case "pause":
-            play.style.display = "none";
-            pause.style.display = "block";
             player.play();
             break;
         default:
             break;
     }
-    // if (player.state !== "playing") player.play();
-    // else player.pause();
-
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/KeyboardEvent/code

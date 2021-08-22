@@ -13,6 +13,9 @@ export default class Player {
         this.list_div = list_div;
         this.control = control;
 
+        this.control_play = control.querySelector("#play");
+        this.control_pause = control.querySelector("#pause");
+
         // this.data = data;
         this.cd_list = this.list_div.querySelector("#player_list_scroll");
         this.cd_list.innerHTML = "";
@@ -26,12 +29,14 @@ export default class Player {
 
         this.audio = null;
     }
+    // 需動態載入多項素材
     mult_import(r) {
         // 載入，須配合 webpack 設定
         let mult = {};
         r.keys().forEach(item => { mult[item.replace('./', '')] = r(item).default;});
         return mult
     }
+    // 處史話 載入列表
     init_list() {
         // 載入列表
         const images = this.mult_import(require.context('./audio', false, /\.jpg$/));
@@ -48,6 +53,7 @@ export default class Player {
         this.cd_list.insertAdjacentHTML("beforeend", html);
         this.cds = this.cd_list.querySelectorAll(".player_cd");
     }
+    // 初始化 列表相關事件
     init_list_event() {
         // 載入列表後給 CD 加上事件
         if (this.cds && this.cds.length === 0) return;
@@ -111,12 +117,17 @@ export default class Player {
         })
 
     }
+    // 初始化 音樂相關
     init_audio() {
         let audio = new Audio();
         audio.loop = false;
 
         audio.type = "audio/m4a"
         audio.volume = this.vol / 100 // 0.0 ~ 1.0
+        audio.addEventListener("canplay", () => {
+            console.log("[canplay]");
+        });
+
         audio.addEventListener("canplaythrough", () => {
             console.log("[canplaythrough]");
             this.play();
@@ -129,17 +140,9 @@ export default class Player {
         });
 
         audio.addEventListener('progress', () => {
-            console.log("[progress]");
+            // console.log("[progress]");
             if (this.audio.readyState === 4) this.progress_bar(this.prog_bar_pre,this.audio.seekable.end(0))
         });
-
-        audio.addEventListener("canplay", () => {
-            console.log("[canplay]");
-        });
-
-        // audio.addEventListener("seeking", () => {
-        //     console.log("[seeking]");
-        // });
 
         audio.addEventListener('timeupdate', () => {
             // ! 更改 this.audio.currentTime 可跳時間
@@ -150,6 +153,16 @@ export default class Player {
             console.log("[readyState]");
         });
 
+        audio.addEventListener("play", () => {
+            // console.log("[play]");
+            this.play();
+        });
+
+        audio.addEventListener("pause", () => {
+            // console.log("[pause]");
+            this.pause();
+        });
+
         audio.addEventListener('ended', () => {
             console.log('[ended]', this.audio.ended);
             if (this.audio.ended) return this.next();
@@ -157,6 +170,7 @@ export default class Player {
 
         this.audio = audio;
     }
+    // 初始化 進度條相關
     init_prog_bar() {
         this.prog_bar = this.control.querySelector(".progress_bar");
         this.prog_bar_bg = this.prog_bar.querySelector(".progress_bar_bg");
@@ -240,12 +254,16 @@ export default class Player {
     play() {
         if (this.state === "playing") return;
         this.state = "playing";
+        play.style.display = "none";
+        pause.style.display = "block";
         this.audio.play();
     }
     // 暫停
     pause() {
         if (this.state === "pause") return;
         this.state = "pause";
+        play.style.display = "block";
+        pause.style.display = "none";
         this.audio.pause();
     }
     // 下一首
@@ -267,6 +285,7 @@ export default class Player {
         if (val > 100) this.audio.volume = 100;
         this.audio.volume = val / 100;
         this.vol = val;
+        return val
     }
 
     // get state() { return this.state }
