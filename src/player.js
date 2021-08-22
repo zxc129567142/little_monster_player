@@ -166,8 +166,15 @@ export default class Player {
 
         this.time_hint = this.control.querySelector("#time_hint");
 
-        const timeFormat = () => {
+        const timeFormat = (sec) => {
+            let mine = 0;
 
+            while (sec >= 60) {
+                mine++;
+                sec -= 60;
+            }
+
+            return `${mine < 10 ? `0${mine}`:mine}:${sec < 10 ? `0${sec}`:sec}`
         }
 
         const fs = getPVal(document.documentElement,"font-size").replace("px","")
@@ -181,15 +188,19 @@ export default class Player {
             time_hint.classList.add("show")
 
             const time = rate * this.audio.duration / 100
-            time_hint.textContent = time
+            time_hint.textContent = timeFormat(~~time)
 
             let posX = e.offsetX - time_hint.offsetWidth / 2
-            if (posX < fs) posX = fs
-            if (posX > (posX + time_hint.offsetWidth - fs)) posX = posX - time_hint.offsetWidth
+            switch (true) {
+                case posX < fs:
+                    posX = fs
+                    break;
+                case posX > (width - time_hint.offsetWidth - fs):
+                    posX = width - time_hint.offsetWidth - fs
+                    break;
+            }
 
-            time_hint.style.left = (~~posX) + "px"
-
-            console.log("posX: %s, fs: %s,width: %s",posX,fs,time_hint.offsetWidth);
+            time_hint.style.left = posX + "px"
 
         }
 
