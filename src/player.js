@@ -46,6 +46,7 @@ export default class Player {
             if (!Object.hasOwnProperty.call(playlist, id)) continue;
             const item = playlist[id];
             if (!item.enabled) continue;
+            playlist[id].artwork = images[item.id + ".jpg"]
             html += `<div class="center_line player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id + ".jpg"]}');"></div>`
             this.max += 1
         }
@@ -257,6 +258,7 @@ export default class Player {
         play.style.display = "none";
         pause.style.display = "block";
         this.audio.play();
+        this.updateMetadata(this.now_play);
     }
     // 暫停
     pause() {
@@ -286,6 +288,26 @@ export default class Player {
         this.audio.volume = val / 100;
         this.vol = val;
         return val
+    }
+
+    // https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API
+    updateMetadata(event) {
+        console.log(event);
+        if ('mediaSession' in navigator) {
+            navigator.mediaSession.metadata = new MediaMetadata({
+                title: event.title,
+                artist: data.username,
+                // album: "Podcast Title",
+                artwork: [
+                    {src: event.artwork, sizes: "128x128", type: "image/jpeg"},
+                    // {src: "podcast_hd.jpg", sizes: "256x256"},
+                    // {src: "podcast_xhd.jpg", sizes: "1024x1024", type: "image/jpeg"},
+                    // {src: "podcast.png", sizes: "128x128", type: "image/png"},
+                    // {src: "podcast_hd.png", sizes: "256x256", type: "image/png"},
+                    // {src: "podcast.ico", sizes: "128x128 256x256", type: "image/x-icon"}
+                ]
+            });
+        }
     }
 
     // get state() { return this.state }
