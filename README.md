@@ -1,15 +1,7 @@
-# 🚀 Welcome to your new awesome project!
+# Little Monster Player
 
-This project has been created using **webpack-cli**, you can now run
+學習 Audio 與嘗試使用 webpack 輸出網頁
 
-```
-npm run build
-```
+音樂作者: `https://www.youtube.com/c/IanSalty鹽顏`
 
-or
-
-```
-yarn build
-```
-
-to bundle your application
+音樂來源: `https://www.youtube.com/playlist?list=PLNxJTljBI8VrQcppeDUsw0xKyyenQA_4m`
