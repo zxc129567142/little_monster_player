@@ -292,7 +292,6 @@ export default class Player {
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API
     updateMetadata(event) {
-        console.log(event);
         if ('mediaSession' in navigator) {
             navigator.mediaSession.metadata = new MediaMetadata({
                 title: event.title,
@@ -301,8 +300,6 @@ export default class Player {
                 artwork: [
                     {src: event.artwork, sizes: "128x128", type: "image/jpeg"},
                     // {src: "podcast_hd.jpg", sizes: "256x256"},
-                    // {src: "podcast_xhd.jpg", sizes: "1024x1024", type: "image/jpeg"},
-                    // {src: "podcast.png", sizes: "128x128", type: "image/png"},
                     // {src: "podcast_hd.png", sizes: "256x256", type: "image/png"},
                     // {src: "podcast.ico", sizes: "128x128 256x256", type: "image/x-icon"}
                 ]
