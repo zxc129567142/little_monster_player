@@ -21,6 +21,10 @@
     --cd-center-size: 14rem;
 }
 
+.empty\:d-none:empty {
+    display: none;
+}
+
 /* ! test only */
 .center_line::after {
     content: "";
@@ -175,4 +179,82 @@ footer {
 }
 
 #player_control_panel {
+}
+
+#volume > #volume_control{
+    width: 0rem;
+    transition-property: width;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+#volume + #cd_info {
+    padding-left: 0rem;
+    transition-property: padding-left;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+}
+
+#volume.open > #volume_control{
+    width: 5rem;
+}
+
+#volume.open + #cd_info {
+    padding-left: 6rem;
+}
+
+
+
+
+input[type="range"] {
+    -webkit-appearance: none;
+    /* 避免點選會有藍線或虛線 */
+    background: none;
+}
+
+input[type="range" i]::-webkit-slider-container {
+    background-color: #FFF;
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+}
+
+input[type="range" i]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    position: relative;
+    height: 12px;
+    width: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 50%;
+    background: #fff;
+    cursor: pointer;
+    transition-property: width,height;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 200ms;
+}
+
+input[type="range" i]:hover::-webkit-slider-thumb {
+    height: 14px;
+    width: 14px;
+}
+
+
+input[type="range" i]::-webkit-slider-thumb:before,
+input[type="range" i]::-webkit-slider-thumb:after {
+    position: absolute;
+    top: 13px;
+    width: 2000px;
+    height: 5px;
+    content: "";
+    pointer-events: none;
+    transition: .2s;
+}
+
+input[type="range" i]::-webkit-slider-thumb:before {
+    left: -2000px;
+    background: #de1c16;
+}
+
+input[type="range" i]::-webkit-slider-thumb:after {
+    left: 15px;
+    background: #d9d9d9;
 }

@@ -60,34 +60,7 @@ export default class Player {
         if (this.cds && this.cds.length === 0) return;
 
         let scroll_left = 0;
-
-        // const calcWidthDiff = () => {
-        //     const cd_center = document.querySelector(".player_cd.cd_center");
-        //     const cd = document.querySelector(".player_cd:not(.cd_center)");
-        //     const maxW = getPVal(cd_center,"width").replace(/\D+/, "");
-        //     const minW = getPVal(cd, "width").replace(/\D+/, "");
-        //     console.log("maxW: " + maxW,"minW: " + minW);
-        //     return (maxW - minW)
-        // }
-
-        // const getFS = getPVal(document.body, "font-size").replace(/\D+/, "");
-
-        // const widthDiff = calcWidthDiff();
-        // console.log("widthDiff: " + widthDiff);
         const center = this.list_div.clientWidth / 2;
-        // const scroll_width = list_scroll.clientWidth / 2;
-
-        // let cd_pre = this.cd_list.querySelector(".player_cd.cd_center");
-
-        // const mult_import = (r) => {
-        //     // 載入多圖，須配合 webpack 設定
-        //     let images = {};
-        //     r.keys().forEach(item => { images[item.replace('./', '')] = r(item).default;});
-        //     return images
-        // }
-        // const images = mult_import(require.context('./audio', false, /\.jpg$/));
-
-
         const sources = this.mult_import(require.context('./audio', false, /\.m4a$/));
 
         this.cds.forEach((cd,idx) => {
@@ -113,13 +86,16 @@ export default class Player {
                 this.cd_list.style.left = `${ scroll_left }px`
                 this.cd_pre = _this
 
-                // this.play();
+                this.updateInfo(this.now_play);
             }
         })
 
     }
     // 初始化 音樂相關
     init_audio() {
+        const time_now = this.control.querySelector(".time_now"); // * 當前時長
+        const time_ttl = this.control.querySelector(".time_ttl"); // * 總時長
+
         let audio = new Audio();
         audio.loop = false;
 
@@ -132,6 +108,8 @@ export default class Player {
         audio.addEventListener("canplaythrough", () => {
             console.log("[canplaythrough]");
             this.play();
+            // * 音樂完整長度
+            time_ttl.textContent = this.time_format(~~this.audio.duration);
         });
 
         audio.addEventListener('loadstart', () => {
@@ -141,13 +119,13 @@ export default class Player {
         });
 
         audio.addEventListener('progress', () => {
-            // console.log("[progress]");
             if (this.audio.readyState === 4) this.progress_bar(this.prog_bar_pre,this.audio.seekable.end(0))
         });
 
         audio.addEventListener('timeupdate', () => {
-            // ! 更改 this.audio.currentTime 可跳時間
-            this.progress_bar(this.prog_bar_main ,this.audio.currentTime)
+            // * 當前播放時間
+            this.progress_bar(this.prog_bar_main ,this.audio.currentTime);
+            time_now.textContent = this.time_format(~~this.audio.currentTime);
         });
 
         audio.addEventListener("readyState", () => {
@@ -155,17 +133,15 @@ export default class Player {
         });
 
         audio.addEventListener("play", () => {
-            // console.log("[play]");
             this.play();
         });
 
         audio.addEventListener("pause", () => {
-            // console.log("[pause]");
             this.pause();
         });
 
         audio.addEventListener('ended', () => {
-            console.log('[ended]', this.audio.ended);
+            console.log('[ended]');
             if (this.audio.ended) return this.next();
         });
 
@@ -181,17 +157,6 @@ export default class Player {
 
         this.time_hint = this.control.querySelector("#time_hint");
 
-        const timeFormat = (sec) => {
-            let mine = 0;
-
-            while (sec >= 60) {
-                mine++;
-                sec -= 60;
-            }
-
-            return `${mine < 10 ? `0${mine}`:mine}:${sec < 10 ? `0${sec}`:sec}`
-        }
-
         const fs = getPVal(document.documentElement,"font-size").replace("px","")
 
         const width = this.prog_bar.clientWidth
@@ -203,7 +168,7 @@ export default class Player {
             time_hint.classList.add("show")
 
             const time = rate * this.audio.duration / 100
-            time_hint.textContent = timeFormat(~~time)
+            time_hint.textContent = this.time_format(~~time)
 
             let posX = e.offsetX - time_hint.offsetWidth / 2
             switch (true) {
@@ -240,13 +205,17 @@ export default class Player {
     progress_bar(_prog_bar,value) {
         value = (typeof value !== "number") ? 0 : value
         const max = this.audio.duration
-        // value =
         let pass = value / max * 100
         pass = (pass >= 100) ? 100 : pass
-        // this.prog_bar_bg
         _prog_bar.style.width = pass + "%"
     }
-    // 競渡條
+    // 秒數格式化成時間
+    time_format (sec) {
+        let mine = ~~(sec / 60);
+        sec = sec % 60
+        return `${mine < 10 ? `0${mine}`:mine}:${sec < 10 ? `0${sec}`:sec}`
+    }
+    // 跳時間點
     set_time(time) {
         this.progress_bar(this.prog_bar_main, time);
         this.audio.currentTime = time;
@@ -288,6 +257,15 @@ export default class Player {
         this.audio.volume = val / 100;
         this.vol = val;
         return val
+    }
+
+    updateInfo(info) {
+        const info_title = this.control.querySelector(".info_title");
+        const info_author = this.control.querySelector(".info_author");
+        // const info_type = this.control.querySelector(".info_type");
+        info_title.textContent = info.title;
+        info_author.textContent = data.username;
+        // info_type.textContent = info.type;
     }
 
     // https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API

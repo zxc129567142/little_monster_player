@@ -5,19 +5,16 @@ import "./main.css";
 const list_div = document.querySelector("#player_list > div");
 
 const control = document.querySelector("#player_control_panel");
-const play = control.querySelector("#play");
-const pause = control.querySelector("#pause");
+// const play = control.querySelector("#play");
+// const pause = control.querySelector("#pause");
 
 const player = new Player(list_div, control);
-player.init();
-// player.volume(10);
-window.player = player
 
 // const progress_bar = control.querySelector(".progress_bar_main")
 const skip_previous = control.querySelector("#skip_previous")
 const play_and_pause = control.querySelector("#play_and_pause")
 const skip_next = control.querySelector("#skip_next")
-const volume = control.querySelector("#volume")
+// const volume = control.querySelector("#volume")
 
 skip_next.onclick = () => {
     player.next();
@@ -56,3 +53,7 @@ window.onkeyup = (e) => {
 }
 
 // console.log(player.volume);
+window.onload = () => {
+    player.init();
+    window.player = player
+}
