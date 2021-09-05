@@ -47,7 +47,7 @@ export default class Player {
             const item = playlist[id];
             if (!item.enabled) continue;
             playlist[id].artwork = images[item.id + ".jpg"]
-            html += `<div class="center_line player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id + ".jpg"]}');"></div>`
+            html += `<div class="player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id + ".jpg"]}');"></div>`
             this.max += 1
         }
 
@@ -61,9 +61,14 @@ export default class Player {
 
         let scroll_left = 0;
         const center = this.list_div.clientWidth / 2;
+        const left = this.list_div.offsetLeft;
         const sources = this.mult_import(require.context('./audio', false, /\.m4a$/));
 
-        this.cds.forEach((cd,idx) => {
+        // ! 不明多偏移了 2px， border width 無關
+        // const borderWidth = parseInt(getPVal(this.cds[0],"border-top-width").replace(/[^\d]/g,"")) * 2
+
+        this.cds.forEach((cd, idx) => {
+
             cd.onclick = (e) => {
                 const _this = e.target;
                 if (this.cd_pre === _this) return;
@@ -76,13 +81,14 @@ export default class Player {
                 const vID = _this.dataset.id
                 this.audio.src = sources[vID + ".m4a"];
 
+                const drctn = (idx > this.now) ? -1 : 1;
                 this.now = idx;
 
                 const rects = _this.getBoundingClientRect();
-                const leftToCenter = rects.left + rects.width / 2;
-                // const leftToCenterDiff = rects.left + (rects.width + widthDiff) / 2;
+                const leftToCenter = rects.left + (rects.width + 96 * drctn) / 2;
 
-                scroll_left = scroll_left + ~(leftToCenter - center )
+                // ! 不明多偏移了 2px，還找不到原因
+                scroll_left = scroll_left + ~(leftToCenter - center) + left + 2
                 this.cd_list.style.left = `${ scroll_left }px`
                 this.cd_pre = _this
 
