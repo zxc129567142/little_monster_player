@@ -263,3 +263,27 @@ input[type="range" i]::-webkit-slider-thumb:after {
     left: 15px;
     background: #d9d9d9;
 }
+
+
+#loading {
+    background-color: var(--main-color);
+    transition-property: opacity,visibility;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
+    transition-delay: 0ms;
+}
+
+#loading.close {
+    opacity: 0;
+    visibility: hidden;
+    transition-delay: 250ms;
+}
+
+#loading .progress_bar_bg {
+    transition: none;
+}
+
+#loading .progress_bar_main::after {
+    content: initial;
+}
+

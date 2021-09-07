@@ -201,10 +201,19 @@ export default class Player {
     }
     // 初始化
     init() {
+        const loading = document.querySelector("#loading")
+        const load_prog_bar = loading.querySelector(".progress_bar_main")
+        loading.classList.remove("close");
+        load_prog_bar.style.width = "0%"
         this.init_prog_bar();
+        load_prog_bar.style.width = "30%"
         this.init_audio();
+        load_prog_bar.style.width = "60%"
         this.init_list();
+        load_prog_bar.style.width = "90%"
         this.init_list_event();
+        load_prog_bar.style.width = "100%"
+        loading.classList.add("close");
         this.next();
     }
     // 競渡條
