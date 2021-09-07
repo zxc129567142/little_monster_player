@@ -181,30 +181,35 @@ footer {
 #player_control_panel {
 }
 
-#volume > #volume_control{
+#volume_div > #volume_control{
     width: 0rem;
-    transition-property: width;
+    opacity: 0;
+    transition-property: width,opacity;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
+    transition-duration: 300ms,100ms;
+    transition-delay: 0s;
 }
 
-#volume + #cd_info {
+#volume_div + #cd_info {
     padding-left: 0rem;
     transition-property: padding-left;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
     transition-duration: 300ms;
 }
 
-#volume.open > #volume_control{
+#volume_div.open > #volume_control{
+    padding-left: 0.75rem;
+    opacity: 1;
     width: 5rem;
+    transition-property: width,opacity;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms,100ms;
+    transition-delay: 0s,150ms;
 }
 
-#volume.open + #cd_info {
+/* #volume_div.open + #cd_info {
     padding-left: 6rem;
-}
-
-
-
+} */
 
 input[type="range"] {
     -webkit-appearance: none;
