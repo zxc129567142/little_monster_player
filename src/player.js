@@ -206,12 +206,14 @@ export default class Player {
         loading.classList.remove("close");
         load_prog_bar.style.width = "0%"
         this.init_prog_bar();
-        load_prog_bar.style.width = "30%"
+        load_prog_bar.style.width = "20%"
         this.init_audio();
-        load_prog_bar.style.width = "60%"
+        load_prog_bar.style.width = "55%"
         this.init_list();
-        load_prog_bar.style.width = "90%"
+        load_prog_bar.style.width = "75%"
         this.init_list_event();
+        load_prog_bar.style.width = "90%"
+        this.init_metadata();
         load_prog_bar.style.width = "100%"
         loading.classList.add("close");
         this.next();
@@ -283,21 +285,42 @@ export default class Player {
         // info_type.textContent = info.type;
     }
 
+    init_metadata() {
+        if (!('mediaSession' in navigator)) return;
+
+        navigator.mediaSession.setActionHandler('play', () => {
+            navigator.mediaSession.playbackState = "playing";
+            this.play();
+        });
+        navigator.mediaSession.setActionHandler('pause', () => {
+            navigator.mediaSession.playbackState = "paused";
+            this.pause();
+        });
+        navigator.mediaSession.setActionHandler('previoustrack', () => {
+            this.previous();
+        });
+        navigator.mediaSession.setActionHandler('nexttrack', () => {
+            this.next();
+        });
+    }
+
     // https://developer.mozilla.org/en-US/docs/Web/API/Media_Session_API
     updateMetadata(event) {
-        if ('mediaSession' in navigator) {
-            navigator.mediaSession.metadata = new MediaMetadata({
-                title: event.title,
-                artist: data.username,
-                // album: "Podcast Title",
-                artwork: [
-                    {src: event.artwork, sizes: "128x128", type: "image/jpeg"},
-                    // {src: "podcast_hd.jpg", sizes: "256x256"},
-                    // {src: "podcast_hd.png", sizes: "256x256", type: "image/png"},
-                    // {src: "podcast.ico", sizes: "128x128 256x256", type: "image/x-icon"}
-                ]
-            });
-        }
+        if (!('mediaSession' in navigator)) return;
+
+        navigator.mediaSession.metadata = new MediaMetadata({
+            title: event.title,
+            artist: data.username,
+            // album: "Podcast Title",
+            artwork: [
+                {src: event.artwork, sizes: "128x128", type: "image/jpeg"},
+                // {src: "podcast_hd.jpg", sizes: "256x256"},
+                // {src: "podcast_hd.png", sizes: "256x256", type: "image/png"},
+                // {src: "podcast.ico", sizes: "128x128 256x256", type: "image/x-icon"}
+            ]
+        });
+        // this.init_metadata();
+
     }
 
     // get state() { return this.state }
