@@ -55,5 +55,5 @@ window.onkeyup = (e) => {
 // console.log(player.volume);
 window.onload = () => {
     player.init();
-    window.player = player
+    window.player = player;
 }

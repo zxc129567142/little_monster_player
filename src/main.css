@@ -103,6 +103,7 @@ footer {
 
 .progress_bar_bg {
     background-color: var(--progress-bg);
+    cursor: pointer;
     height: 2px;
     transition-property: height;
     transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
@@ -267,16 +268,16 @@ input[type="range" i]::-webkit-slider-thumb:after {
 
 #loading {
     background-color: var(--main-color);
-    transition-property: opacity,visibility;
-    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-    transition-duration: 300ms;
-    transition-delay: 0ms;
+    transition:none;
 }
 
 #loading.close {
     opacity: 0;
     visibility: hidden;
     transition-delay: 250ms;
+    transition-property: opacity,visibility;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 300ms;
 }
 
 #loading .progress_bar_bg {

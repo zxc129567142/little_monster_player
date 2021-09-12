@@ -8,6 +8,16 @@ const playlist = data.playlist;
 // https://developer.mozilla.org/zh-CN/docs/Web/API/Web_Audio_API
 // https://developer.mozilla.org/zh-CN/docs/Web/API/HTMLMediaElement
 
+const sleep = ms => new Promise(done => setTimeout(() => done(), ms));
+
+// 需動態載入多項素材
+const mult_import = r => {
+    // 載入，須配合 webpack 設定
+    let mult = {};
+    r.keys().forEach(item => { mult[item.replace('./', '')] = r(item).default;});
+    return mult
+}
+
 export default class Player {
     constructor(list_div, control) {
         this.list_div = list_div;
@@ -29,17 +39,11 @@ export default class Player {
 
         this.audio = null;
     }
-    // 需動態載入多項素材
-    mult_import(r) {
-        // 載入，須配合 webpack 設定
-        let mult = {};
-        r.keys().forEach(item => { mult[item.replace('./', '')] = r(item).default;});
-        return mult
-    }
+
     // 處史話 載入列表
     init_list() {
         // 載入列表
-        const images = this.mult_import(require.context('./audio', false, /\.jpg$/));
+        const images = mult_import(require.context('./audio', false, /\.jpg$/));
 
         let html = '';
         for (const id in playlist) {
@@ -62,7 +66,7 @@ export default class Player {
         let scroll_left = 0;
         const center = this.list_div.clientWidth / 2;
         const left = this.list_div.offsetLeft;
-        const sources = this.mult_import(require.context('./audio', false, /\.m4a$/));
+        const sources = mult_import(require.context('./audio', false, /\.m4a$/));
 
         // ! 不明多偏移了 2px， border width 無關
         // const borderWidth = parseInt(getPVal(this.cds[0],"border-top-width").replace(/[^\d]/g,"")) * 2
@@ -81,11 +85,14 @@ export default class Player {
                 const vID = _this.dataset.id
                 this.audio.src = sources[vID + ".m4a"];
 
+                console.log(vID,"\n",this.now,idx)
+
                 const drctn = (idx > this.now) ? -1 : 1;
                 this.now = idx;
 
                 const rects = _this.getBoundingClientRect();
                 const leftToCenter = rects.left + (rects.width + 96 * drctn) / 2;
+                console.log(vID,"\n[cd leftToCenter]", leftToCenter,"\n[cd drctn]",drctn);
 
                 // ! 不明多偏移了 2px，還找不到原因
                 scroll_left = scroll_left + ~(leftToCenter - center) + left + 2
@@ -196,27 +203,32 @@ export default class Player {
         }
 
         this.prog_bar.onclick = (e) => {
-            this.set_time((e.offsetX / width * 100) * this.audio.duration / 100);
+            if ( this.now >= this.min ) this.set_time((e.offsetX / width * 100) * this.audio.duration / 100);
         }
     }
     // 初始化
-    init() {
+    async init() {
         const loading = document.querySelector("#loading")
         const load_prog_bar = loading.querySelector(".progress_bar_main")
         loading.classList.remove("close");
-        load_prog_bar.style.width = "0%"
+        load_prog_bar.style.width = "0%";
         this.init_prog_bar();
-        load_prog_bar.style.width = "20%"
+        await sleep(100)
+        load_prog_bar.style.width = "20%";
         this.init_audio();
-        load_prog_bar.style.width = "55%"
+        await sleep(100)
+        load_prog_bar.style.width = "55%";
         this.init_list();
-        load_prog_bar.style.width = "75%"
+        await sleep(100)
+        load_prog_bar.style.width = "75%";
         this.init_list_event();
-        load_prog_bar.style.width = "90%"
+        await sleep(100)
+        load_prog_bar.style.width = "90%";
         this.init_metadata();
-        load_prog_bar.style.width = "100%"
+        await sleep(100)
+        load_prog_bar.style.width = "100%";
         loading.classList.add("close");
-        this.next();
+        // this.next(); // chrome 55 以後禁止自動撥放
     }
     // 競渡條
     progress_bar(_prog_bar,value) {
@@ -248,6 +260,7 @@ export default class Player {
     }
     // 暫停
     pause() {
+        if (this.audio.readyState < 4) return;
         if (this.state === "pause") return;
         this.state = "pause";
         play.style.display = "block";
@@ -256,15 +269,13 @@ export default class Player {
     }
     // 下一首
     next() {
-        this.now += 1
-        if (this.now > this.max) return this.now = this.max;
-        this.cds[this.now].click();
+        if (this.now >= this.max) return;
+        this.cds[this.now + 1].click();
     }
     // 上一首
     previous() {
-        this.now -= 1
-        if (this.now < this.min) return this.now = this.min;
-        this.cds[this.now].click();
+        if (this.now <= this.min) return;
+        this.cds[this.now - 1].click();
     }
     // 音量
     volume(val) {
@@ -323,8 +334,6 @@ export default class Player {
 
     }
 
-    // get state() { return this.state }
-    // get volume() { return this.vol }
     get now_play() { return playlist[(this.cds[this.now].dataset.id)] }
 }
 
