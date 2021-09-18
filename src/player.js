@@ -51,7 +51,11 @@ export default class Player {
             const item = playlist[id];
             if (!item.enabled) continue;
             playlist[id].artwork = images[item.id + ".jpg"]
-            html += `<div class="player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id + ".jpg"]}');"></div>`
+            html += `<div class="player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id + ".jpg"]}');">
+                    <div class="player_cd_info absolute left-0 -bottom-8 py-1 w-full h-6 text-base leading-4 text-white flex items-center justify-center" style="background-color: var(--select-color);">
+                        <div class="pointer-events-none">i</div>
+                    </div>
+                </div>`
             this.max += 1
         }
 
@@ -71,35 +75,53 @@ export default class Player {
         // ! 不明多偏移了 2px， border width 無關
         // const borderWidth = parseInt(getPVal(this.cds[0],"border-top-width").replace(/[^\d]/g,"")) * 2
 
+        const info_modal = document.querySelector("#info_modal")
+
         this.cds.forEach((cd, idx) => {
 
             cd.onclick = (e) => {
                 const _this = e.target;
-                if (this.cd_pre === _this) return;
-                if (this.cd_pre) this.cd_pre.classList.remove("cd_center");
-                this.pause();
-                this.progress_bar(this.prog_bar_pre, 0);
-                this.progress_bar(this.prog_bar_main, 0);
-                _this.classList.add("cd_center");
+                if (_this.className.indexOf("player_cd_info") >= 0 ) {
+                    // console.log(this.now_play);
+                    const data = this.now_play
+                    const view = info_modal.querySelector(".icon_view + .value");
+                    const like = info_modal.querySelector(".icon_like + .value");
+                    const dislike = info_modal.querySelector(".icon_dislike + .value");
+                    const comment = info_modal.querySelector(".icon_comment + .value");
+                    view.textContent = data.statistics.view;
+                    like.textContent = data.statistics.like;
+                    dislike.textContent = data.statistics.dislike;
+                    comment.textContent = data.statistics.comment;
 
-                const vID = _this.dataset.id
-                this.audio.src = sources[vID + ".m4a"];
+                    const desc = info_modal.querySelector(".cd_desc");
+                    desc.innerHTML = data.description.replace(/\n/g,"<br>")
 
-                console.log(vID,"\n",this.now,idx)
+                    info_modal.classList.remove("close");
+                } else if (_this.className.indexOf("player_cd") >= 0 ) {
 
-                const drctn = (idx > this.now) ? -1 : 1;
-                this.now = idx;
+                    if (this.cd_pre === _this) return;
+                    if (this.cd_pre) this.cd_pre.classList.remove("cd_center");
+                    this.pause();
+                    this.progress_bar(this.prog_bar_pre, 0);
+                    this.progress_bar(this.prog_bar_main, 0);
+                    _this.classList.add("cd_center");
 
-                const rects = _this.getBoundingClientRect();
-                const leftToCenter = rects.left + (rects.width + 96 * drctn) / 2;
-                console.log(vID,"\n[cd leftToCenter]", leftToCenter,"\n[cd drctn]",drctn);
+                    const vID = _this.dataset.id
+                    this.audio.src = sources[vID + ".m4a"];
 
-                // ! 不明多偏移了 2px，還找不到原因
-                scroll_left = scroll_left + ~(leftToCenter - center) + left + 2
-                this.cd_list.style.left = `${ scroll_left }px`
-                this.cd_pre = _this
+                    const drctn = (idx > this.now) ? -1 : 1;
+                    this.now = idx;
 
-                this.updateInfo(this.now_play);
+                    const rects = _this.getBoundingClientRect();
+                    const leftToCenter = rects.left + (rects.width + 96 * drctn) / 2;
+
+                    // ! 不明多偏移了 2px，還找不到原因
+                    scroll_left = scroll_left + ~(leftToCenter - center) + left + 2
+                    this.cd_list.style.left = `${ scroll_left }px`
+                    this.cd_pre = _this
+
+                    this.updateInfo(this.now_play);
+                }
             }
         })
 
@@ -334,6 +356,6 @@ export default class Player {
 
     }
 
-    get now_play() { return playlist[(this.cds[this.now].dataset.id)] }
+    get now_play() { return (this.now >= this.min || this.now <= this.max) ? playlist[(this.cds[this.now].dataset.id)] : {} }
 }
 

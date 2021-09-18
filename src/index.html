@@ -11,8 +11,37 @@
     <link rel="apple-touch-icon" href="<%=require("./assets/icon/apple-album-144.png").default%>" sizes="144x144">
     <link rel="apple-touch-icon" href="<%=require("./assets/icon/apple-album-180.png").default%>" sizes="180x180">
     <link rel="icon" href="<%=require("./assets/icon/album.svg").default%>" sizes="any" type="image/svg+xml">
+
+    <style>
+        /* 載入 SVG 問題多多 QQ */
+        .icon.icon_view {
+            -webkit-mask-image: url('<%=require("./assets/visibility.svg").default%>');
+            mask-image: url('<%=require("./assets/visibility.svg").default%>');
+        }
+
+        .icon.icon_like {
+            -webkit-mask-image: url('<%=require("./assets/thumb_up.svg").default%>');
+            mask-image: url('<%=require("./assets/thumb_up.svg").default%>');
+        }
+
+        .icon.icon_dislike {
+            -webkit-mask-image: url('<%=require("./assets/thumb_down.svg").default%>');
+            mask-image: url('<%=require("./assets/thumb_down.svg").default%>');
+        }
+
+        .icon.icon_favorite {
+            -webkit-mask-image: url('<%=require("./assets/favorite.svg").default%>');
+            mask-image: url('<%=require("./assets/favorite.svg").default%>');
+        }
+
+        .icon.icon_comment {
+            -webkit-mask-image: url('<%=require("./assets/chat.svg").default%>');
+            mask-image: url('<%=require("./assets/chat.svg").default%>');
+        }
+    </style>
+
 </head>
-<body class="h-screen w-screen">
+<body class="h-screen w-screen overflow-hidden">
     <main>
         <div class="px-5 py-3 h-full">
             <div id="player_list" class="flex flex-nowrap flex-row items-end text-white h-full">
@@ -72,6 +101,41 @@
             </div>
         </div>
     </footer>
+
+    <div id="info_modal" class="modal fixed top-0 left-0 z-40">
+        <div class="w-screen h-screen py-16 px-8 overflow-auto">
+            <div class="flex items-center justify-center min-h-full">
+                <div class="modal_main rounded overflow-hidden">
+                    <div class="modal_header px-4 py-2 relative items-center bg-blue-700">
+                        <div class="modal_title w-100 pr-12"><div class="truncate">標題</div></div>
+                        <div class="modal_close cursor-pointer text-center absolute right-0 top-0 py-2 px-4 hover:opacity-100 opacity-70 transition transition-opacity" onclick="this.closest('.modal').classList.add('close')">&times;</div>
+                    </div>
+                    <div class="modal_body p-4 bg-yellow-700">
+                        <div class="cd_statistics flex flex-row flex-wrap gap-3">
+                            <div class="flex flex-row flex-nowrap gap-1">
+                                <div class="h-8 w-8 icon icon_view"></div>
+                                <div class="value text-2xl">0</div>
+                            </div>
+                            <div class="flex flex-row flex-nowrap gap-1">
+                                <div class="h-8 w-8 icon icon_like"></div>
+                                <div class="value text-2xl">0</div>
+                            </div>
+                            <div class="flex flex-row flex-nowrap gap-1">
+                                <div class="h-8 w-8 icon icon_dislike"></div>
+                                <div class="value text-2xl">0</div>
+                            </div>
+                            <div class="flex flex-row flex-nowrap gap-1">
+                                <div class="h-8 w-8 icon icon_comment"></div>
+                                <div class="value text-2xl">0</div>
+                            </div>
+                        </div>
+                        <div class="cd_desc"></div>
+                    </div>
+                    <div class="modal_footer px-4 py-2 bg-indigo-700"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div id="loading" class="close w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex flex-wrap content-center items-center justify-center visible opacity-100 z-50">
         <div class="mb-3 text-white text-3xl">Loading...</div>

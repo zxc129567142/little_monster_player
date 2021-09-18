@@ -41,16 +41,27 @@ const config = {
                 use: [stylesHandler, 'css-loader', 'postcss-loader'],
             },
             {
-              test: /\.(png|jpe?g|gif|svg)$/i,
-              use: [
-                {
-                  loader: 'url-loader',
-                  options: {
-                    limit: true,
-                    name: 'img/[name].[ext]',
-                  },
-                },
-              ],
+                test: /\.(png|jpe?g|gif)$/i,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            limit: true,
+                            name: 'img/[name].[ext]',
+                        },
+                    },
+                ],
+            },
+            {
+                test: /\.(svg)$/i,
+                use: [
+                    {
+                        loader: 'url-loader',
+                        options: {
+                            name: 'img/[name].[ext]',
+                        },
+                    },
+                ],
             },
             {
                 test: /\.(mp3|m4a)$/i,
@@ -75,9 +86,6 @@ const config = {
                     },
                 ],
             },
-
-            // Add your rules for custom modules here
-            // Learn more about loaders from https://webpack.js.org/loaders/
         ],
     },
 };
@@ -86,7 +94,7 @@ module.exports = () => {
     if (isProduction) {
         config.mode = 'production';
 
-        config.plugins.push(new MiniCssExtractPlugin());
+        // config.plugins.push(new MiniCssExtractPlugin());
 
 
     } else {
