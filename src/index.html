@@ -38,6 +38,16 @@
             -webkit-mask-image: url('<%=require("./assets/chat.svg").default%>');
             mask-image: url('<%=require("./assets/chat.svg").default%>');
         }
+
+        .icon.icon_open_in_new {
+            -webkit-mask-image: url('<%=require("./assets/open_in_new.svg").default%>');
+            mask-image: url('<%=require("./assets/open_in_new.svg").default%>');
+        }
+
+        .player_cd_info > div {
+            -webkit-mask-image: url('<%=require("./assets/info.svg").default%>');
+            mask-image: url('<%=require("./assets/info.svg").default%>');
+        }
     </style>
 
 </head>
@@ -102,16 +112,17 @@
         </div>
     </footer>
 
+    <!-- modal -->
     <div id="info_modal" class="modal fixed top-0 left-0 z-40">
         <div class="w-screen h-screen py-16 px-8 overflow-auto">
             <div class="flex items-center justify-center min-h-full">
                 <div class="modal_main rounded overflow-hidden">
                     <div class="modal_header px-4 py-2 relative items-center bg-blue-700">
-                        <div class="modal_title w-100 pr-12"><div class="truncate">標題</div></div>
+                        <div class="modal_title w-100 pr-12"><div class="truncate">&nbsp;</div></div>
                         <div class="modal_close cursor-pointer text-center absolute right-0 top-0 py-2 px-4 hover:opacity-100 opacity-70 transition transition-opacity" onclick="this.closest('.modal').classList.add('close')">&times;</div>
                     </div>
                     <div class="modal_body p-4 bg-yellow-700">
-                        <div class="cd_statistics flex flex-row flex-wrap gap-3">
+                        <div class="mb-2 pb-2 border-b cd_statistics flex flex-row flex-wrap gap-3">
                             <div class="flex flex-row flex-nowrap gap-1">
                                 <div class="h-8 w-8 icon icon_view"></div>
                                 <div class="value text-2xl">0</div>
@@ -128,6 +139,13 @@
                                 <div class="h-8 w-8 icon icon_comment"></div>
                                 <div class="value text-2xl">0</div>
                             </div>
+                            <div class=" ml-auto flex flex-row flex-nowrap gap-1">
+                                <div class="h-8 w-8 icon icon_open_in_new cursor-pointer hover:bg-red-500 transition transition-colors"
+                                    data-id="" onclick="const id = this.dataset.id;if ( id.length > 0 ) void(window.open('https:\/\/youtu.be\/' + id));"></div>
+                            </div>
+                        </div>
+                        <div class="cd_pubic_date text-sm text-gray-300 mb-2">
+                            <span>公開日期 </span><span class="value"></span>
                         </div>
                         <div class="cd_desc"></div>
                     </div>
@@ -137,6 +155,7 @@
         </div>
     </div>
 
+    <!-- loading 頁面 -->
     <div id="loading" class="close w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex flex-wrap content-center items-center justify-center visible opacity-100 z-50">
         <div class="mb-3 text-white text-3xl">Loading...</div>
         <div class="w-screen relative h-12">

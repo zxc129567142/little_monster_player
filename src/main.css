@@ -89,6 +89,7 @@ footer {
     position: relative;
     border: var(--border);
     box-sizing: border-box;
+    overflow: hidden;
 }
 
 .player_cd.cd_center{
@@ -303,7 +304,7 @@ input[type="range" i]::-webkit-slider-thumb:after {
 
 .modal .modal_main {
     border: var(--border);
-    min-width: 30%;
+    min-width: 500px;
     max-width: 100%;
 }
 

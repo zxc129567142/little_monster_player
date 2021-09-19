@@ -52,8 +52,8 @@ export default class Player {
             if (!item.enabled) continue;
             playlist[id].artwork = images[item.id + ".jpg"]
             html += `<div class="player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id + ".jpg"]}');">
-                    <div class="player_cd_info absolute left-0 -bottom-8 py-1 w-full h-6 text-base leading-4 text-white flex items-center justify-center" style="background-color: var(--select-color);">
-                        <div class="pointer-events-none">i</div>
+                    <div class="player_cd_info absolute left-0 -bottom-8 py-1 w-full h-8 text-base leading-4 text-white flex items-center justify-center" style="background-color: var(--select-color);">
+                        <div class="pointer-events-none icon w-full h-full"></div>
                     </div>
                 </div>`
             this.max += 1
@@ -84,6 +84,12 @@ export default class Player {
                 if (_this.className.indexOf("player_cd_info") >= 0 ) {
                     // console.log(this.now_play);
                     const data = this.now_play
+                    const title = info_modal.querySelector(".modal_title > div");
+                    title.textContent = data.title
+
+                    const pubic_date = info_modal.querySelector(".cd_pubic_date .value");
+                    pubic_date.textContent = new Date(data.publishedAt).toLocaleString();
+
                     const view = info_modal.querySelector(".icon_view + .value");
                     const like = info_modal.querySelector(".icon_like + .value");
                     const dislike = info_modal.querySelector(".icon_dislike + .value");
@@ -93,8 +99,20 @@ export default class Player {
                     dislike.textContent = data.statistics.dislike;
                     comment.textContent = data.statistics.comment;
 
+                    const open_in_new = info_modal.querySelector(".icon_open_in_new");
+                    open_in_new.dataset.id = data.id;
+
                     const desc = info_modal.querySelector(".cd_desc");
-                    desc.innerHTML = data.description.replace(/\n/g,"<br>")
+                    let descText = data.description
+
+                    const findTag = descText.match(/\#[^\s\n\t]+/g)
+                    if (findTag) {
+                        findTag.forEach((tag) => {
+                            const tagText = tag.replace("#","").toLowerCase()
+                            descText = descText.replace(tag,`<a href="//youtube.com/hashtag/${tagText}" target="_blank" rel="noopener noreferrer" class="text-blue-500">${tag}</a>`)
+                        })
+                    }
+                    desc.innerHTML = descText.replace(/\n/g, "<br>")
 
                     info_modal.classList.remove("close");
                 } else if (_this.className.indexOf("player_cd") >= 0 ) {
