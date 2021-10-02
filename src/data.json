@@ -1,15 +1,15 @@
 {
     "username": "鹽顏 Ian Salty",
     "yt-channel-id": "UCCihPFnCKXL6XjJOnerFp1A",
-    "sns": {
+    "links": {
+        "youtube": "https://www.youtube.com/c/IanSalty鹽顏",
         "twitter": "https://twitter.com/salty_ian",
         "facebook": "https://www.facebook.com/683488892103310",
-        "pixiv-fanbox": "https://saityian9527.fanbox.cc",
         "plurk": "https://www.plurk.com/Saltyian9527",
         "marshmallow": "https://marshmallow-qa.com/salty_ian",
-        "streamlabs": "https://streamlabs.com/iansalty",
         "soundcloud": "https://soundcloud.com/ian-salty",
-        "soundcloud_old": "https://soundcloud.com/user-90167623"
+        "fanbox": "https://saityian9527.fanbox.cc",
+        "streamlabs": "https://streamlabs.com/iansalty"
     },
     "playlist": {
         "cIUrS5w9NbM":{

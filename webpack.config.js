@@ -41,12 +41,12 @@ const config = {
                 use: [stylesHandler, 'css-loader', 'postcss-loader'],
             },
             {
-                test: /\.(png|jpe?g|gif)$/i,
+                test: /\.(png|jpe?g|gif|ico)$/i,
                 use: [
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: true,
+                            limit: 0,
                             name: 'img/[name].[ext]',
                         },
                     },
@@ -58,6 +58,7 @@ const config = {
                     {
                         loader: 'url-loader',
                         options: {
+                            limit: 0,
                             name: 'img/[name].[ext]',
                         },
                     },

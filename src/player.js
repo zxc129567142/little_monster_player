@@ -14,14 +14,16 @@ const sleep = ms => new Promise(done => setTimeout(() => done(), ms));
 const mult_import = r => {
     // 載入，須配合 webpack 設定
     let mult = {};
-    r.keys().forEach(item => { mult[item.replace('./', '')] = r(item).default;});
+    r.keys().forEach(item => { mult[item.replace('./', '').replace(/\.\w+$/g,"")] = r(item).default;});
     return mult
 }
 
 export default class Player {
-    constructor(list_div, control) {
+    constructor(list_div, control, sidebar) {
         this.list_div = list_div;
         this.control = control;
+        this.list = sidebar.querySelector("#player_list");
+        this.info = sidebar.querySelector("#player_info");
 
         this.control_play = control.querySelector("#play");
         this.control_pause = control.querySelector("#pause");
@@ -39,28 +41,49 @@ export default class Player {
 
         this.audio = null;
     }
-
     // 處史話 載入列表
     init_list() {
         // 載入列表
         const images = mult_import(require.context('./audio', false, /\.jpg$/));
 
         let html = '';
+        let html2 = '';
         for (const id in playlist) {
             if (!Object.hasOwnProperty.call(playlist, id)) continue;
             const item = playlist[id];
             if (!item.enabled) continue;
-            playlist[id].artwork = images[item.id + ".jpg"]
-            html += `<div class="player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id + ".jpg"]}');">
+            playlist[id].artwork = images[item.id]
+            html += `<div class="player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id]}');">
                     <div class="player_cd_info absolute left-0 -bottom-8 py-1 w-full h-8 text-base leading-4 text-white flex items-center justify-center" style="background-color: var(--select-color);">
                         <div class="pointer-events-none icon w-full h-full"></div>
                     </div>
                 </div>`
             this.max += 1
+
+            html2 +=
+            `<div data-id="${item.id}" data-idx="${this.max}" class="h-16 w-full flex flex-nowrap flex-row items-center gap-1 py-1 cursor-pointer">
+                <div class="h-full flex items-center justify-center">
+                    <svg fill="#FFFFFF" class="w-10 h-10" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"></path></svg>
+                </div>
+                <div class="h-full w-16">
+                    <div class="bg_img w-full h-full" style="background-image: url('${images[item.id]}');"></div>
+                </div>
+                <div><div class="truncate">${item.title}</div><div class="time_ttl">00:00</div></div>
+                <div></div>
+            </div>`
         }
 
         this.cd_list.insertAdjacentHTML("beforeend", html);
         this.cds = this.cd_list.querySelectorAll(".player_cd");
+
+        this.list.insertAdjacentHTML("beforeend", html2);
+
+        this.list.onclick = (e) => {
+            const _this = e.target;
+            if (!_this.dataset.id) return;
+            const cd = this.cd_list.querySelector(`.player_cd[data-id='${_this.dataset.id}']`);
+            cd.click();
+        }
     }
     // 初始化 列表相關事件
     init_list_event() {
@@ -81,7 +104,7 @@ export default class Player {
 
             cd.onclick = (e) => {
                 const _this = e.target;
-                if (_this.className.indexOf("player_cd_info") >= 0 ) {
+                if (_this.className.indexOf("player_cd_info") >= 0) {
                     // console.log(this.now_play);
                     const data = this.now_play
                     const title = info_modal.querySelector(".modal_title > div");
@@ -108,40 +131,42 @@ export default class Player {
                     const findTag = descText.match(/\#[^\s\n\t]+/g)
                     if (findTag) {
                         findTag.forEach((tag) => {
-                            const tagText = tag.replace("#","").toLowerCase()
-                            descText = descText.replace(tag,`<a href="//youtube.com/hashtag/${tagText}" target="_blank" rel="noopener noreferrer" class="text-blue-500">${tag}</a>`)
+                            const tagText = tag.replace("#", "").toLowerCase()
+                            descText = descText.replace(tag, `<a href="//youtube.com/hashtag/${tagText}" target="_blank" rel="noopener noreferrer" class="text-blue-500">${tag}</a>`)
                         })
                     }
                     desc.innerHTML = descText.replace(/\n/g, "<br>")
 
                     info_modal.classList.remove("close");
-                } else if (_this.className.indexOf("player_cd") >= 0 ) {
+                } else if (_this.className.indexOf("player_cd") >= 0) {
 
                     if (this.cd_pre === _this) return;
-                    if (this.cd_pre) this.cd_pre.classList.remove("cd_center");
+                    if (this.cd_pre) this.cd_pre.classList.remove("now_play");
                     this.pause();
                     this.progress_bar(this.prog_bar_pre, 0);
                     this.progress_bar(this.prog_bar_main, 0);
-                    _this.classList.add("cd_center");
+                    _this.classList.add("now_play");
 
-                    const vID = _this.dataset.id
-                    this.audio.src = sources[vID + ".m4a"];
+                    const vID = _this.dataset.id;
+                    this.audio.src = sources[vID];
 
                     const drctn = (idx > this.now) ? -1 : 1;
                     this.now = idx;
 
-                    const rects = _this.getBoundingClientRect();
-                    const leftToCenter = rects.left + (rects.width + 96 * drctn) / 2;
+                    const rect = _this.getBoundingClientRect();
+                    const leftToCenter = rect.left + (rect.width + 96 * drctn) / 2;
 
                     // ! 不明多偏移了 2px，還找不到原因
                     scroll_left = scroll_left + ~(leftToCenter - center) + left + 2
-                    this.cd_list.style.left = `${ scroll_left }px`
+                    this.cd_list.style.left = `${scroll_left}px`
                     this.cd_pre = _this
 
                     this.updateInfo(this.now_play);
+
+                    this.list.querySelector("[data-id='${_this.dataset.id}']")
                 }
             }
-        })
+        });
 
     }
     // 初始化 音樂相關
@@ -246,6 +271,24 @@ export default class Player {
             if ( this.now >= this.min ) this.set_time((e.offsetX / width * 100) * this.audio.duration / 100);
         }
     }
+    // 初始化 一些資訊
+    init_info() {
+        const count = this.info.querySelector(".count");
+        const links = this.info.querySelector("#links");
+
+        const icons = mult_import(require.context('./assets/web', false, /\.(png|jpe?g|ico|svg)$/));
+        console.log(icons)
+
+        count.textContent = playlist.length;
+        console.log(data.links)
+
+        let html = ""
+        for (const link of Object.keys(data.links)) {
+            html += `<a href="${data.links[link]}" class="bg_img" title="${link}" style="background-image: url(${icons[link]});" target="_blank" rel="noopener noreferrer"></a>`
+        }
+        links.insertAdjacentHTML("beforeend", html)
+
+    }
     // 初始化
     async init() {
         const loading = document.querySelector("#loading")
@@ -253,20 +296,21 @@ export default class Player {
         loading.classList.remove("close");
         load_prog_bar.style.width = "0%";
         this.init_prog_bar();
-        await sleep(100)
-        load_prog_bar.style.width = "20%";
+        await sleep(50)
+        load_prog_bar.style.width = "25%";
         this.init_audio();
-        await sleep(100)
+        await sleep(50)
         load_prog_bar.style.width = "55%";
         this.init_list();
-        await sleep(100)
+        await sleep(50)
         load_prog_bar.style.width = "75%";
         this.init_list_event();
-        await sleep(100)
+        await sleep(50)
         load_prog_bar.style.width = "90%";
         this.init_metadata();
-        await sleep(100)
+        await sleep(50)
         load_prog_bar.style.width = "100%";
+        this.init_info();
         loading.classList.add("close");
         // this.next(); // chrome 55 以後禁止自動撥放
     }

@@ -74,10 +74,6 @@ footer {
     transition-duration: 300ms;
 }
 
-#player_list > div {
-    position: relative;
-}
-
 .player_cd{
     cursor: pointer;
     user-select: none;
@@ -92,7 +88,7 @@ footer {
     overflow: hidden;
 }
 
-.player_cd.cd_center{
+.player_cd.now_play{
     height: var(--cd-center-size);
     width: var(--cd-center-size);
 }
@@ -103,8 +99,60 @@ footer {
     transition-duration: 150ms;
 }
 
-.player_cd.cd_center:hover .player_cd_info {
+.player_cd.now_play:hover .player_cd_info {
     bottom: 0;
+}
+
+#player_list_sidebar {
+
+}
+
+#player_list_sidebar.open {
+    --tw-translate-x: 0%;
+}
+
+#links {
+    display: grid;
+    grid-template-columns: repeat(auto-fill,1.25rem);
+    grid-template-rows: 1.25rem;
+    gap: .5rem;
+    padding: .5rem 0;
+}
+
+#links > * {
+    height: 100%;
+    width: 100%;
+}
+
+#player_list > div {
+    background-color: var(--main-color);
+    border: var(--border);
+}
+
+#player_list > div > * {
+    pointer-events: none;
+}
+
+#player_list > div > :nth-of-type(1) {
+    transition-property: width;
+    transition-timing-function: var(--timing-function);
+    transition-duration: 150ms;
+    width: 0rem;
+}
+
+#player_list > div.now_play > :nth-of-type(1) {
+    width: 2.5rem;
+}
+
+#player_list > div > :nth-of-type(3) {
+    transition-property: width;
+    transition-timing-function: var(--timing-function);
+    transition-duration: 150ms;
+    width: calc(100% - 4.25rem - 0.25rem);
+}
+
+#player_list > div.now_play > :nth-of-type(3) {
+    width: calc(100% - 4.25rem - 0.25rem * 2 - 2.5rem);
 }
 
 .progress_bar { }
