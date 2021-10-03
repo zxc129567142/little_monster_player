@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-Hant-TW">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
     <title>Little Monster Player</title>
     <link rel="apple-touch-icon" href="<%=require("./assets/icon/apple-album-57.png").default%>" sizes="57x57">
     <link rel="apple-touch-icon" href="<%=require("./assets/icon/apple-album-72.png").default%>" sizes="72x72">
@@ -126,23 +126,23 @@
                     <div class="modal_body p-4 bg-yellow-700">
                         <div class="mb-2 pb-2 border-b cd_statistics flex flex-row flex-wrap gap-3">
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 mask_img icon_view"></div>
-                                <div class="value text-2xl">0</div>
+                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_view"></div>
+                                <div class="value md:text-2xl">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 mask_img icon_like"></div>
-                                <div class="value text-2xl">0</div>
+                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_like"></div>
+                                <div class="value md:text-2xl">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 mask_img icon_dislike"></div>
-                                <div class="value text-2xl">0</div>
+                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_dislike"></div>
+                                <div class="value md:text-2xl">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 mask_img icon_comment"></div>
-                                <div class="value text-2xl">0</div>
+                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_comment"></div>
+                                <div class="value md:text-2xl">0</div>
                             </div>
                             <div class=" ml-auto flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 mask_img icon_open_in_new cursor-pointer hover:bg-red-500 transition transition-colors"
+                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_open_in_new cursor-pointer hover:bg-red-500 transition transition-colors"
                                     data-id="" onclick="const id = this.dataset.id;if ( id.length > 0 ) void(window.open('https:\/\/youtu.be\/' + id));"></div>
                             </div>
                         </div>

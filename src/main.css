@@ -20,8 +20,8 @@
     --progress-pre: #858585;
     --progress-bg: #333333;
 
-    --cd-size: 8rem;
-    --cd-center-size: 14rem;
+    --cd-size: 6rem;
+    --cd-center-size: 11rem;
 
     --timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -404,3 +404,10 @@ input[type="range" i]::-webkit-slider-thumb:after {
     content: initial;
 }
 
+
+@media (min-width: 768px) {
+    :root {
+        --cd-size: 8rem;
+        --cd-center-size: 14rem;
+    }
+}
