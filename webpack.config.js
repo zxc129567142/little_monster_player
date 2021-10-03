@@ -44,9 +44,9 @@ const config = {
                 test: /\.(png|jpe?g|gif|ico)$/i,
                 use: [
                     {
-                        loader: 'url-loader',
+                        loader: 'file-loader',
                         options: {
-                            limit: 0,
+                            publicPath: "./",
                             name: 'img/[name].[ext]',
                         },
                     },
@@ -58,8 +58,7 @@ const config = {
                     {
                         loader: 'url-loader',
                         options: {
-                            limit: 0,
-                            name: 'img/[name].[ext]',
+                            limit: true,
                         },
                     },
                 ],
@@ -70,6 +69,7 @@ const config = {
                     {
                         loader: 'file-loader',
                         options: {
+                            publicPath: "./",
                             name: 'audio/[name].[ext]',
                         },
                     },
@@ -92,14 +92,6 @@ const config = {
 };
 
 module.exports = () => {
-    if (isProduction) {
-        config.mode = 'production';
-
-        // config.plugins.push(new MiniCssExtractPlugin());
-
-
-    } else {
-        config.mode = 'development';
-    }
+    config.mode = isProduction?"production":"development"
     return config;
 };

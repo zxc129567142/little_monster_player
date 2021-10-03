@@ -13,45 +13,34 @@
     <link rel="icon" href="<%=require("./assets/icon/album.svg").default%>" sizes="any" type="image/svg+xml">
 
     <style>
-        /* 載入 SVG 問題多多 QQ */
-        .icon.icon_view {
-            -webkit-mask-image: url('<%=require("./assets/visibility.svg").default%>');
-            mask-image: url('<%=require("./assets/visibility.svg").default%>');
-        }
-
-        .icon.icon_like {
-            -webkit-mask-image: url('<%=require("./assets/thumb_up.svg").default%>');
-            mask-image: url('<%=require("./assets/thumb_up.svg").default%>');
-        }
-
-        .icon.icon_dislike {
-            -webkit-mask-image: url('<%=require("./assets/thumb_down.svg").default%>');
-            mask-image: url('<%=require("./assets/thumb_down.svg").default%>');
-        }
-
-        .icon.icon_favorite {
-            -webkit-mask-image: url('<%=require("./assets/favorite.svg").default%>');
-            mask-image: url('<%=require("./assets/favorite.svg").default%>');
-        }
-
-        .icon.icon_comment {
-            -webkit-mask-image: url('<%=require("./assets/chat.svg").default%>');
-            mask-image: url('<%=require("./assets/chat.svg").default%>');
-        }
-
-        .icon.icon_open_in_new {
-            -webkit-mask-image: url('<%=require("./assets/open_in_new.svg").default%>');
-            mask-image: url('<%=require("./assets/open_in_new.svg").default%>');
-        }
-
+        .mask_img.icon_view { --mask-img: url('<%=require("./assets/visibility.svg").default%>'); }
+        .mask_img.icon_like { --mask-img: url('<%=require("./assets/thumb_up.svg").default%>'); }
+        .mask_img.icon_dislike { --mask-img: url('<%=require("./assets/thumb_down.svg").default%>'); }
+        .mask_img.icon_favorite { --mask-img: url('<%=require("./assets/favorite.svg").default%>'); }
+        .mask_img.icon_comment { --mask-img: url('<%=require("./assets/chat.svg").default%>'); }
+        .mask_img.icon_open_in_new { --mask-img: url('<%=require("./assets/open_in_new.svg").default%>'); }
         .player_cd_info > div {
-            -webkit-mask-image: url('<%=require("./assets/info.svg").default%>');
-            mask-image: url('<%=require("./assets/info.svg").default%>');
+            --mask-img: url('<%=require("./assets/info.svg").default%>');
+            -webkit-mask-size: contain;
+            mask-size: contain;
         }
     </style>
 
 </head>
 <body class="h-screen w-screen overflow-hidden">
+
+    <!-- loading 頁面 -->
+    <div id="loading" class="close w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex flex-wrap content-center items-center justify-center visible opacity-100 z-50">
+        <div class="mb-3 text-white text-3xl">Loading...</div>
+        <div class="w-screen relative h-12">
+            <div class="absolute flex h-full items-center left-0 overflow-hidden transform w-screen">
+                <div class="progress_bar_bg relative w-full">
+                    <div class="progress_bar_main absolute -translate-y-1/2 left-0 h-full"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <main>
         <div class="px-5 py-3 h-full relative">
             <div id="player_list_display" class="flex flex-nowrap flex-row items-end text-white h-full">
@@ -64,9 +53,9 @@
             </div>
             <div id="player_list_sidebar" class="flex flex-col flex-nowrap transition-transform transform-gpu translate-x-full absolute right-0 top-0 w-full md:w-96 h-full text-white" style="border-left: 1px solid var(--border-color);background-color: var(--footer-color);">
                 <div id="player_info" class="p-3 border-b" style="border-color: var(--border-color);">
-                    <div class="title text-2xl">ㄅ</div>
+                    <div id="title" class="text-2xl">ㄅ</div>
                     <div id="links"></div>
-                    <div><span>總 <span class="count">0</span> 數</span></div>
+                    <div><span>共 <span class="count">0</span> 首</span></div>
                 </div>
                 <div id="player_list" class="p-3 overflow-auto max-h-full flex flex-col gap-2"></div>
             </div>
@@ -83,14 +72,14 @@
                 </div>
             </div>
             <div id="time_hint" class="absolute -top-14 p-1">0</div>
-            <div id="skip_previous" class="player_btn h-7 w-7" title="上一首">
+            <div id="skip_previous" class="hidden md:block player_btn h-7 w-7" title="上一首">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M7 6c.55 0 1 .45 1 1v10c0 .55-.45 1-1 1s-1-.45-1-1V7c0-.55.45-1 1-1zm3.66 6.82l5.77 4.07c.66.47 1.58-.01 1.58-.82V7.93c0-.81-.91-1.28-1.58-.82l-5.77 4.07c-.57.4-.57 1.24 0 1.64z"/></svg>
             </div>
             <div id="play_and_pause" class="player_btn h-12 w-12" title="播放">
                 <svg id="play" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M8 6.82v10.36c0 .79.87 1.27 1.54.84l8.14-5.18c.62-.39.62-1.29 0-1.69L9.54 5.98C8.87 5.55 8 6.03 8 6.82z"/></svg>
                 <svg id="pause" style="display:none;" xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M8 19c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2v10c0 1.1.9 2 2 2zm6-12v10c0 1.1.9 2 2 2s2-.9 2-2V7c0-1.1-.9-2-2-2s-2 .9-2 2z"/></svg>
             </div>
-            <div id="skip_next" class="player_btn h-7 w-7" title="下一首">
+            <div id="skip_next" class="hidden md:block player_btn h-7 w-7" title="下一首">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24"><path d="M7.58 16.89l5.77-4.07c.56-.4.56-1.24 0-1.63L7.58 7.11C6.91 6.65 6 7.12 6 7.93v8.14c0 .81.91 1.28 1.58.82zM16 7v10c0 .55.45 1 1 1s1-.45 1-1V7c0-.55-.45-1-1-1s-1 .45-1 1z"/></svg>
             </div>
             <div id="volume_div" class="h-6 flex flex-nowrap items-center"
@@ -106,7 +95,7 @@
             <div id="cd_info" class="truncate h-full w-full">
                 <div class="flex-nowrap justify-between items-center flex gap-1.5 h-full">
                     <div class="truncate flex flex-wrap justify-start content-center items-center h-full gap-1 leading-4">
-                        <span class="truncate w-full text-xl info_title"></span>
+                        <span class="truncate w-full md:text-xl info_title"></span>
                         <span class="w-auto info_author"></span>
                         <!-- <span class="w-auto info_type text-xs empty:d-none"></span> -->
                     </div>
@@ -127,33 +116,33 @@
 
     <!-- modal -->
     <div id="info_modal" class="modal fixed top-0 left-0 z-40 close">
-        <div class="w-screen h-screen py-16 px-8 overflow-auto">
+        <div class="w-screen h-screen md:py-12 py-8 md:px-8 px-4 overflow-auto">
             <div class="flex items-center justify-center min-h-full">
                 <div class="modal_main rounded overflow-hidden">
-                    <div class="modal_header px-4 py-2 relative items-center bg-blue-700">
+                    <div class="modal_header px-4 py-2 relative items-center">
                         <div class="modal_title w-100 pr-12"><div class="truncate">&nbsp;</div></div>
                         <div class="modal_close cursor-pointer text-center absolute right-0 top-0 py-2 px-4 hover:opacity-100 opacity-70 transition transition-opacity" onclick="this.closest('.modal').classList.add('close')">&times;</div>
                     </div>
                     <div class="modal_body p-4 bg-yellow-700">
                         <div class="mb-2 pb-2 border-b cd_statistics flex flex-row flex-wrap gap-3">
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 icon icon_view"></div>
+                                <div class="h-8 w-8 mask_img icon_view"></div>
                                 <div class="value text-2xl">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 icon icon_like"></div>
+                                <div class="h-8 w-8 mask_img icon_like"></div>
                                 <div class="value text-2xl">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 icon icon_dislike"></div>
+                                <div class="h-8 w-8 mask_img icon_dislike"></div>
                                 <div class="value text-2xl">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 icon icon_comment"></div>
+                                <div class="h-8 w-8 mask_img icon_comment"></div>
                                 <div class="value text-2xl">0</div>
                             </div>
                             <div class=" ml-auto flex flex-row flex-nowrap gap-1">
-                                <div class="h-8 w-8 icon icon_open_in_new cursor-pointer hover:bg-red-500 transition transition-colors"
+                                <div class="h-8 w-8 mask_img icon_open_in_new cursor-pointer hover:bg-red-500 transition transition-colors"
                                     data-id="" onclick="const id = this.dataset.id;if ( id.length > 0 ) void(window.open('https:\/\/youtu.be\/' + id));"></div>
                             </div>
                         </div>
@@ -168,16 +157,5 @@
         </div>
     </div>
 
-    <!-- loading 頁面 -->
-    <div id="loading" class="close w-screen h-screen fixed top-0 left-0 right-0 bottom-0 flex flex-wrap content-center items-center justify-center visible opacity-100 z-50">
-        <div class="mb-3 text-white text-3xl">Loading...</div>
-        <div class="w-screen relative h-12">
-            <div class="absolute flex h-full items-center left-0 overflow-hidden transform w-screen">
-                <div class="progress_bar_bg relative w-full">
-                    <div class="progress_bar_main absolute -translate-y-1/2 left-0 h-full"></div>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 </html>

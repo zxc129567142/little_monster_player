@@ -41,7 +41,7 @@ export default class Player {
 
         this.audio = null;
     }
-    // 處史話 載入列表
+    // 初始化 載入列表
     init_list() {
         // 載入列表
         const images = mult_import(require.context('./audio', false, /\.jpg$/));
@@ -55,7 +55,7 @@ export default class Player {
             playlist[id].artwork = images[item.id]
             html += `<div class="player_cd bg_img" data-id="${item.id}" style="background-image: url('${images[item.id]}');">
                     <div class="player_cd_info absolute left-0 -bottom-8 py-1 w-full h-8 text-base leading-4 text-white flex items-center justify-center" style="background-color: var(--select-color);">
-                        <div class="pointer-events-none icon w-full h-full"></div>
+                        <div class="pointer-events-none mask_img w-full h-full"></div>
                     </div>
                 </div>`
             this.max += 1
@@ -78,7 +78,7 @@ export default class Player {
 
         this.list.insertAdjacentHTML("beforeend", html2);
 
-        this.list.onclick = (e) => {
+        this.list.onclick = e => {
             const _this = e.target;
             if (!_this.dataset.id) return;
             const cd = this.cd_list.querySelector(`.player_cd[data-id='${_this.dataset.id}']`);
@@ -128,24 +128,33 @@ export default class Player {
                     const desc = info_modal.querySelector(".cd_desc");
                     let descText = data.description
 
-                    const findTag = descText.match(/\#[^\s\n\t]+/g)
-                    if (findTag) {
-                        findTag.forEach((tag) => {
-                            const tagText = tag.replace("#", "").toLowerCase()
-                            descText = descText.replace(tag, `<a href="//youtube.com/hashtag/${tagText}" target="_blank" rel="noopener noreferrer" class="text-blue-500">${tag}</a>`)
-                        })
+                    if (descText) {
+                        const findTag = descText.match(/\#[^\s\n\t]+/g)
+                        if (findTag) {
+                            findTag.forEach((tag) => {
+                                const tagText = tag.replace("#", "").toLowerCase()
+                                descText = descText.replace(tag, `<a href="https//youtube.com/hashtag/${tagText}" target="_blank" rel="noopener noreferrer" class="text-blue-500">${tag}</a>`)
+                            })
+                        }
+                        desc.innerHTML = descText.replace(/\n/g, "<br>")
                     }
-                    desc.innerHTML = descText.replace(/\n/g, "<br>")
 
                     info_modal.classList.remove("close");
                 } else if (_this.className.indexOf("player_cd") >= 0) {
 
                     if (this.cd_pre === _this) return;
-                    if (this.cd_pre) this.cd_pre.classList.remove("now_play");
+                    let list_cd_pre
+                    if (this.cd_pre) {
+                        this.cd_pre.classList.remove("now_play");
+                        list_cd_pre = this.list.querySelector("[data-id='" + this.cd_pre.dataset.id + "']");
+                        if (list_cd_pre) list_cd_pre.classList.remove("now_play");
+                    }
                     this.pause();
                     this.progress_bar(this.prog_bar_pre, 0);
                     this.progress_bar(this.prog_bar_main, 0);
                     _this.classList.add("now_play");
+                    list_cd_pre = this.list.querySelector("[data-id='" + _this.dataset.id + "']");
+                    if (list_cd_pre) list_cd_pre.classList.add("now_play");
 
                     const vID = _this.dataset.id;
                     this.audio.src = sources[vID];
@@ -188,6 +197,8 @@ export default class Player {
             this.play();
             // * 音樂完整長度
             time_ttl.textContent = this.time_format(~~this.audio.duration);
+            const time_ttl_pre = this.list.querySelector("[data-id='" + this.cd_pre.dataset.id + "'] .time_ttl");
+            if (time_ttl_pre) time_ttl_pre.textContent = time_ttl.textContent
         });
 
         audio.addEventListener('loadstart', () => {
@@ -273,20 +284,21 @@ export default class Player {
     }
     // 初始化 一些資訊
     init_info() {
-        const count = this.info.querySelector(".count");
+        const title = this.info.querySelector("#title");
         const links = this.info.querySelector("#links");
+        const count = this.info.querySelector(".count");
+
+        title.textContent = data.username
 
         const icons = mult_import(require.context('./assets/web', false, /\.(png|jpe?g|ico|svg)$/));
-        console.log(icons)
-
-        count.textContent = playlist.length;
-        console.log(data.links)
 
         let html = ""
         for (const link of Object.keys(data.links)) {
             html += `<a href="${data.links[link]}" class="bg_img" title="${link}" style="background-image: url(${icons[link]});" target="_blank" rel="noopener noreferrer"></a>`
         }
-        links.insertAdjacentHTML("beforeend", html)
+        links.insertAdjacentHTML("beforeend", html);
+
+        count.textContent = Object.keys(playlist).length;
 
     }
     // 初始化

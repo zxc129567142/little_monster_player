@@ -62,6 +62,8 @@ footer {
 }
 
 .mask_img {
+    --mask-img: none;
+    mask-image: var(--mask-img);
     background-color: var(--text-color);
     mask-position: center;
     mask-repeat: no-repeat;
@@ -99,7 +101,7 @@ footer {
     transition-duration: 150ms;
 }
 
-.player_cd.now_play:hover .player_cd_info {
+.player_cd.now_play .player_cd_info {
     bottom: 0;
 }
 
@@ -330,12 +332,6 @@ input[type="range" i]::-webkit-slider-thumb:after {
     background: #d9d9d9;
 }
 
-.icon {
-    background-color: #FFFFFF;
-    mask-position: center;
-    mask-repeat: no-repeat;
-}
-
 .modal {
     background-color: var(--backdrop-color);
     opacity: 1;
@@ -352,7 +348,7 @@ input[type="range" i]::-webkit-slider-thumb:after {
 
 .modal .modal_main {
     border: var(--border);
-    min-width: 500px;
+    width: 500px;
     max-width: 100%;
 }
 
