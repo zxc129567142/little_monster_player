@@ -5,6 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, minimum-scale=1.0,maximum-scale=1.0,user-scalable=no, initial-scale=1, shrink-to-fit=no, viewport-fit=cover">
     <title>Little Monster Player</title>
+    <meta content="#212121" name="theme-color">
+    <meta name="google" content="notranslate">
+    <meta content="Little Monster Player" name="title">
+    <meta content="Little Monster Player" property="og:title">
+    <meta content="Little Monster Player" property="twitter:title">
+    <meta content="學習 Audio 與嘗試使用 webpack 輸出網頁，網頁所使用的音樂與封面圖，皆來自 鹽顏 (Ian Salty) 的 YT 頻道，。" name="description">
+    <meta content="學習 Audio 與嘗試使用 webpack 輸出網頁，網頁所使用的音樂與封面圖，皆來自 鹽顏 (Ian Salty) 的 YT 頻道，。" property="og:description">
+    <meta content="學習 Audio 與嘗試使用 webpack 輸出網頁，網頁所使用的音樂與封面圖，皆來自 鹽顏 (Ian Salty) 的 YT 頻道，。" name="twitter:description">
+    <meta content="https://zxc129567142.github.io/little_monster_player/dist/index.html" property="og:url">
+    <meta content="<%=require("./assets/channels4_banner.png").default%>" property="og:image">
+    <meta content="<%=require("./assets/channels4_banner.png").default%>" name="twitter:image:src">
+    <meta content="summary_large_image" name="twitter:card">
     <link rel="apple-touch-icon" href="<%=require("./assets/icon/apple-album-57.png").default%>" sizes="57x57">
     <link rel="apple-touch-icon" href="<%=require("./assets/icon/apple-album-72.png").default%>" sizes="72x72">
     <link rel="apple-touch-icon" href="<%=require("./assets/icon/apple-album-114.png").default%>" sizes="114x114">
@@ -126,23 +138,23 @@
                     <div class="modal_body p-4 bg-yellow-700">
                         <div class="mb-2 pb-2 border-b cd_statistics flex flex-row flex-wrap gap-3">
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_view"></div>
-                                <div class="value md:text-2xl">0</div>
+                                <div class="h-4 w-4 md:h-6 md:w-6 mask_img icon_view"></div>
+                                <div class="value">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_like"></div>
-                                <div class="value md:text-2xl">0</div>
+                                <div class="h-4 w-4 md:h-6 md:w-6 mask_img icon_like"></div>
+                                <div class="value">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_dislike"></div>
-                                <div class="value md:text-2xl">0</div>
+                                <div class="h-4 w-4 md:h-6 md:w-6 mask_img icon_dislike"></div>
+                                <div class="value">0</div>
                             </div>
                             <div class="flex flex-row flex-nowrap gap-1">
-                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_comment"></div>
-                                <div class="value md:text-2xl">0</div>
+                                <div class="h-4 w-4 md:h-6 md:w-6 mask_img icon_comment"></div>
+                                <div class="value">0</div>
                             </div>
                             <div class=" ml-auto flex flex-row flex-nowrap gap-1">
-                                <div class="h-6 w-6 md:h-8 md:w-8 mask_img icon_open_in_new cursor-pointer hover:bg-red-500 transition transition-colors"
+                                <div class="h-4 w-4 md:h-6 md:w-6 mask_img icon_open_in_new cursor-pointer hover:bg-red-500 transition transition-colors"
                                     data-id="" onclick="const id = this.dataset.id;if ( id.length > 0 ) void(window.open('https:\/\/youtu.be\/' + id));"></div>
                             </div>
                         </div>
